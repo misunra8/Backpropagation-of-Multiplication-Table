@@ -76,39 +76,19 @@ class NNetwork(object):
     def backprop(self, _inputs, _outputKnown, _outFound):
         _inputs = np.array(_inputs)
         self.errorRate = _outputKnown - _outFound
-        # print(self.errorRate)
         self.outGrad = self.errorRate * self.sigmoid(_outFound, True)
-        # print(self.outGrad)
         print("")
 
         self.hidErrorRate = self.outGrad.dot(self.weights[1][:-1].T)
-        print(self.hidErrorRate)
         self.hidGrad = self.hidErrorRate * self.sigmoid(self.outHidden,True)
 
 
-        # print(self.hiddenLayerWithBias.reshape(4,1))
-        # #
-        # print('')
-        # print(self.weights[1])
-        # print(self.hiddenLayerWithBias.reshape(4,1))
-        # print((self.hiddenLayerWithBias.reshape(4,1).dot(self.outGrad).reshape(1,4)).T)
-
 
         self.weights[0] += ((_inputs.reshape(3,1).dot(self.hidGrad.reshape(1,3))) * self.LEARNING_RATE) + (self.MOMENTUM_RATE * self.previousDeltaW1)
-        # print(self.weights[0])
         self.previousDeltaW1 = ((_inputs.reshape(3,1).dot(self.hidGrad.reshape(1,3))) * self.LEARNING_RATE) + (self.MOMENTUM_RATE * self.previousDeltaW1)
-        # print(self.previousDeltaW1)
         self.weights[1] += ((self.hiddenLayerWithBias.reshape(4,1).dot(self.outGrad).reshape(1,4).T) * self.LEARNING_RATE) + (self.MOMENTUM_RATE * self.previousDeltaW2)
-        # print(self.weights[1])
         self.previousDeltaW2 = ((self.hiddenLayerWithBias.reshape(4,1).dot(self.outGrad).reshape(1,4).T) * self.LEARNING_RATE) + (self.MOMENTUM_RATE * self.previousDeltaW2)
-        #
-        # print(self.previousDeltaW2)
-        # print('')
-        # print(self.weights[0])
-        # print('')
-        # print(self.weights[1])
-        # # print(self.weights[0][0][0])
-        # print(self.errorRate)
+        
 
     def train(self,_inputs,_outputs):
         _outFound = self.forward(_inputs)
@@ -155,37 +135,10 @@ outputTest = outputs[TRAINING_SIZE:]
 
 np.random.shuffle(inputTrain)
 
-# print(NN.forward([0.2,0.3,1]))
-# NN.backprop([0.2,0.3,1],0.06,NN.forward([0.2,0.3,1]))
 for e in range(EPOCH):
     for x in range(TRAINING_SIZE):
         NN.train(inputTrain[x],outputTrain[x])
 
-# # NN.printSummary()
-# z=np.zeros(30,dtype=float)
-# a=np.zeros(30,dtype=int)
-# for x in range(100 - TRAINING_SIZE):
-#     z[x] = np.round(NN.forward(inputTest[x]),2)*100
-#     a[x] = outputTest[x]*100
-#     # print(np.round(NN.forward(inputTest[x]),2)*100,outputTest[x]*100)
-#
-# for e in range(4*EPOCH):
-#     for x in range(TRAINING_SIZE):
-#         NN.train(inputTrain[x],outputTrain[x])
-#
-# # NN.printSummary()
-# z1=np.zeros(30,dtype=float)
-# for x in range(100 - TRAINING_SIZE):
-#     z1[x] = np.round(NN.forward(inputTest[x]),2)*100
-#
-# for e in range(5*EPOCH):
-#     for x in range(TRAINING_SIZE):
-#         NN.train(inputTrain[x],outputTrain[x])
-#
-# # NN.printSummary()
-# z2=np.zeros(30,dtype=float)
-# for x in range(100 - TRAINING_SIZE):
-#     z2[x] = np.round(NN.forward(inputTest[x]),2)*100
 
 print("Enter 2 Multiplication Values")
 inputKeyb = [float(i) for i in input().split()]
@@ -194,53 +147,3 @@ while inputKeyb[0] != 0 and inputKeyb[1] != 0:
     print((NN.forward([inputKeyb[0]/NORM_DIV , inputKeyb[1]/NORM_DIV,1]))*NORM_DIV*NORM_DIV)
     print("Enter 2 Multiplication Values")
     inputKeyb = [float(i) for i in input().split()]
-#
-#
-# gs = gridspec.GridSpec(2,2)
-# plt.figure()
-#
-#
-# ax00 =plt.subplot(gs[0,0])
-# plt.plot(np.sort(a), np.sort(a),label="Expected Data",linewidth=2,color='black')
-# plt.plot(np.sort(a[:10]), np.sort(z[:10]),label="1 EPOCH",linewidth=2,color='green')
-# plt.plot(np.sort(a[:10]), np.sort(z1[:10]),label="5 EPOCH",linewidth=2,color='blue')
-# plt.plot(np.sort(a[:10]), np.sort(z2[:10]),label="10 EPOCH",linewidth=2,color='red')
-# plt.xlabel('x - axis')
-# plt.ylabel('y - axis')
-# plt.legend(loc=4)
-# plt.title('Between 70-80')
-#
-# ax01 = plt.subplot(gs[0,1])
-# plt.plot(np.sort(a), np.sort(a),label="Expected Data",linewidth=2,color='black')
-# plt.plot(np.sort(a[10:20]), np.sort(z[10:20]),label="1 EPOCH",linewidth=2,color='green')
-# plt.plot(np.sort(a[10:20]), np.sort(z1[10:20]),label="5 EPOCH",linewidth=2,color='blue')
-# plt.plot(np.sort(a[10:20]), np.sort(z2[10:20]),label="10 EPOCH",linewidth=2,color='red')
-# plt.xlabel('x - axis')
-# plt.ylabel('y - axis')
-# plt.legend(loc=4)
-# plt.title('Between 80-90')
-#
-# ax10 = plt.subplot(gs[1,0])
-# plt.plot(np.sort(a), np.sort(a),label="Expected Data",linewidth=2,color='black')
-# plt.plot(np.sort(a[20:30]), np.sort(z[20:30]),label="1 EPOCH",linewidth=2,color='green')
-# plt.plot(np.sort(a[20:30]), np.sort(z1[20:30]),label="5 EPOCH",linewidth=2,color='blue')
-# plt.plot(np.sort(a[20:30]), np.sort(z2[20:30]),label="10 EPOCH",linewidth=2,color='red')
-# plt.xlabel('x - axis')
-# plt.ylabel('y - axis')
-# plt.legend(loc=4)
-# plt.title('Between 90-100')
-#
-# ax11 = plt.subplot(gs[1,1])
-# plt.plot(np.sort(a), np.sort(a),label="Expected Data",linewidth=2,color='black')
-# plt.plot(np.sort(a), np.sort(z),label="1 EPOCH",linewidth=2,color='green')
-# plt.plot(np.sort(a), np.sort(z1),label="5 EPOCH",linewidth=2,color='blue')
-# plt.plot(np.sort(a), np.sort(z2),label="10 EPOCH",linewidth=2,color='red')
-# plt.xlabel('x - axis')
-# plt.ylabel('y - axis')
-# plt.legend(loc=4)
-#
-# # giving a title to my graph
-# plt.title('Between 70-100 - Sorted')
-#
-# # function to show the plot
-# plt.show()
